@@ -13,11 +13,14 @@ Terminal *-- Panel
 
 'Aggregation
 
+'Used as a base class for terminal, allows for drawing and sizing
+'Implement non abstract then make it abstract
 abstract class Window {
 int x;
 int y;
 }
 
+'Implement the Terminal as one class first, then break it out into separate modules
 class Terminal {
 }
 
@@ -43,6 +46,9 @@ class Company {
 }
 
 class Ticker {
+}
+
+abstract class Data {
 }
 
 @enduml
