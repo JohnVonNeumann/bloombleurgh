@@ -1,0 +1,48 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+'Inheritance
+Window <|- Terminal
+Import <|- FileImport
+Import <|- WebImport
+
+'Composition
+Terminal *-- Toolbar
+Terminal *-- Button
+Terminal *-- Panel
+
+'Aggregation
+
+abstract class Window {
+int x;
+int y;
+}
+
+class Terminal {
+}
+
+class Toolbar {
+}
+
+class Button {
+}
+
+class Panel {
+}
+
+class Import {
+}
+
+class FileImport {
+}
+
+class WebImport {
+}
+
+class Company {
+}
+
+class Ticker {
+}
+
+@enduml
