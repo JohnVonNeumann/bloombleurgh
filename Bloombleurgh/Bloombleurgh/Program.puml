@@ -6,7 +6,14 @@ Window <|- Terminal
 Import <|- FileImport
 Import <|- WebImport
 
+
+Component <|- Heading
+Component <|- Toolbar
+Component <|- Button
+Component <|- Panel
+
 'Composition
+Terminal *-- Heading
 Terminal *-- Toolbar
 Terminal *-- Button
 Terminal *-- Panel
@@ -22,7 +29,24 @@ int y;
 
 'Implement the Terminal as one class first, then break it out into separate modules
 class Terminal {
+- List<Component> components
+
++ void DrawAllComponents()
 }
+
+abstract class Component {
+- int x
+- int y
+- double length
+- double width
+- double height
+
++ Draw()
+'Probably want some sort of polymorphic IsAt to handle all styles of rect
++ IsAt()
+}
+
+class Heading {}
 
 class Toolbar {
 }
@@ -34,6 +58,7 @@ class Panel {
 }
 
 class Import {
+- string/file storageLocation
 }
 
 class FileImport {
