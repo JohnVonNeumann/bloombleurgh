@@ -12,11 +12,13 @@ Component <|- Toolbar
 Component <|- Button
 Component <|- Panel
 
+Panel <|- CompanyListPanel
+
 'Composition
-Terminal *-- Heading
-Terminal *-- Toolbar
-Terminal *-- Button
-Terminal *-- Panel
+Terminal *-- CompanyListPanel
+
+CompanyListPanel *-- Company
+Company *-- Ticker
 
 'Aggregation
 
@@ -57,8 +59,19 @@ class Button {
 class Panel {
 }
 
+class CompanyListPanel {
+- List<Company> companyList
+}
+
+'Perhaps fuck the import stuff, just use existing input files to start
+'Dont bother with having an independent way to call new files, just populate
+'from a data directory until everything is working, then add on as a bonus
 class Import {
-- string/file storageLocation
+- path storageLocation
+- string fileName
+- path remoteLocation
+
++ Import(remoteLocation, storageLocation, fileName)
 }
 
 class FileImport {
@@ -68,9 +81,24 @@ class WebImport {
 }
 
 class Company {
+- string name
+- bool active
+- Ticker ticker
+
++ Company()
+
+__properties__
+--getter only--
+bool Active
 }
 
 class Ticker {
+- string code
+
++ Ticker(code, Company)
+
+--properties--
++ Code
 }
 
 abstract class Data {
