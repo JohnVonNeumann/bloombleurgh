@@ -57,6 +57,9 @@ class Button {
 }
 
 class Panel {
+- Data data
+
++ Panel(data)
 }
 
 class CompanyListPanel {
