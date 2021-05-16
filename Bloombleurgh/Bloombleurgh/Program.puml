@@ -3,21 +3,31 @@
 
 'Inheritance
 Window <|- Terminal
-Import <|- FileImport
-Import <|- WebImport
-
 
 Component <|- Heading
 Component <|- Toolbar
 Component <|- Button
 Component <|- Panel
 
+IInteractable <|- Button
+
 Panel <|- CompanyListPanel
+Panel <|- CompanyDetailsPanel
+Panel <|- CompanyFinancialsPanel
+
+IUpdatable <|- CompanyListPanel
+IUpdatable <|- CompanyDetailsPanel
+IUpdatable <|- CompanyFinancialsPanel
+
 
 'Composition
 Terminal *-- CompanyListPanel
+Terminal *-- CompanyDetailsPanel
+Terminal *-- CompanyFinancialsPanel
 
 CompanyListPanel *-- Company
+CompanyDetailsPanel *-- Company
+CompanyFinancialsPanel *-- Company
 Company *-- Ticker
 
 'Aggregation
@@ -48,40 +58,82 @@ abstract class Component {
 + IsAt()
 }
 
-class Heading {}
+class Heading {
+- string _title
 
++ Heading()
+}
+
+' unsure if a Toolbar is even needed
 class Toolbar {
 }
 
+enum PanelType {
+    CompanyList
+    CompanyDetails
+    CompanyFinancials
+}
+
+enum ComponentType {
+    Panel
+    Heading
+    Toolbar
+    Button
+}
+
 class Button {
+- string _title
+
++ Button()
+
++ void ActionOnUserInteraction()
+}
+
+interface IInteractable {
++ void ActionOnUserInteraction()
 }
 
 class Panel {
-- Data data
+- string Data
+' refers to the json key that holds the data we wish to populate
+- string DataKey
 
 + Panel(data)
+
++ void RefreshData()
++ void GetData()
 }
 
 class CompanyListPanel {
 - List<Company> companyList
+
++ CompanyListPanel()
+
++ ChangeCompany(string CompanyName)
 }
 
-'Perhaps fuck the import stuff, just use existing input files to start
-'Dont bother with having an independent way to call new files, just populate
-'from a data directory until everything is working, then add on as a bonus
-class Import {
-- path storageLocation
-- string fileName
-- path remoteLocation
+class CompanyDetailsPanel {
+- Company _company
 
-+ Import(remoteLocation, storageLocation, fileName)
++ CompanyDetailsPanel()
+
++ ChangeCompany(string CompanyName)
 }
 
-class FileImport {
+class CompanyFinancialsPanel {
+- Company _company
+
++ CompanyFinancialsPanel()
+
++ ChangeCompany(string CompanyName)
 }
 
-class WebImport {
+' Replaces the property for Company Panels as when the company is updated, it needs to update
+' the data in the panel
+interface IUpdatable {
++ ChangeCompany(string CompanyName);
 }
+
 
 class Company {
 - string name
@@ -104,7 +156,26 @@ class Ticker {
 + Code
 }
 
-abstract class Data {
-}
+''Perhaps fuck the import stuff, just use existing input files to start
+''Dont bother with having an independent way to call new files, just populate
+''from a data directory until everything is working, then add on as a bonus
+'class Import {
+'- path storageLocation
+'- string fileName
+'- path remoteLocation
+'
+'+ Import(remoteLocation, storageLocation, fileName)
+'}
+'
+'class FileImport {
+'}
+'
+'class WebImport {
+'}
+'abstract class Data {
+'}
+'
+'Import <|- FileImport
+'Import <|- WebImport
 
 @enduml
