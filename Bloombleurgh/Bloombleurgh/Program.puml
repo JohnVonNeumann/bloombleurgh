@@ -1,33 +1,33 @@
 @startuml
 'https://plantuml.com/class-diagram
 
+
 'Inheritance
-Window <|- Terminal
+Window <|-- Terminal
 
-Component <|- Heading
-Component <|- Toolbar
-Component <|- Button
-Component <|- Panel
+Component <|-- Heading
 
-IInteractable <|- Button
+IInteractable <|-- Button
 
-Panel <|- CompanyListPanel
-Panel <|- CompanyDetailsPanel
-Panel <|- CompanyFinancialsPanel
+CompanyPanel ---|> IUpdatable
 
-IUpdatable <|- CompanyListPanel
-IUpdatable <|- CompanyDetailsPanel
-IUpdatable <|- CompanyFinancialsPanel
-
+Component <|-- Toolbar
+Component <|-- Button
+Component <|-- Panel
+'Component <|- Toolbar
 
 'Composition
-Terminal *-- CompanyListPanel
-Terminal *-- CompanyDetailsPanel
-Terminal *-- CompanyFinancialsPanel
+Terminal *-- Component
+
+CompanyPanel *--- Company
+CompanyPanel <|-- CompanyListPanel
+CompanyPanel<|-- CompanyDetailsPanel
+CompanyPanel <|-- CompanyFinancialsPanel
 
 CompanyListPanel *-- Company
 CompanyDetailsPanel *-- Company
 CompanyFinancialsPanel *-- Company
+Panel <|-- CompanyPanel
 Company *-- Ticker
 
 'Aggregation
@@ -104,12 +104,15 @@ class Panel {
 + void GetData()
 }
 
+class CompanyPanel {
+    + ChangeCompany(string CompanyName)
+}
+
 class CompanyListPanel {
 - List<Company> companyList
 
 + CompanyListPanel()
 
-+ ChangeCompany(string CompanyName)
 }
 
 class CompanyDetailsPanel {
@@ -117,7 +120,6 @@ class CompanyDetailsPanel {
 
 + CompanyDetailsPanel()
 
-+ ChangeCompany(string CompanyName)
 }
 
 class CompanyFinancialsPanel {
@@ -125,7 +127,6 @@ class CompanyFinancialsPanel {
 
 + CompanyFinancialsPanel()
 
-+ ChangeCompany(string CompanyName)
 }
 
 ' Replaces the property for Company Panels as when the company is updated, it needs to update
