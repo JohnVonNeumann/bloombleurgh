@@ -1,0 +1,182 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+
+'Inheritance
+Window <|-- Terminal
+
+Component <|-- Heading
+
+IInteractable <|-- Button
+
+CompanyPanel ---|> IUpdatable
+
+Component <|-- Toolbar
+Component <|-- Button
+Component <|-- Panel
+'Component <|- Toolbar
+
+'Composition
+Terminal *-- Component
+
+CompanyPanel *--- Company
+CompanyPanel <|-- CompanyListPanel
+CompanyPanel<|-- CompanyDetailsPanel
+CompanyPanel <|-- CompanyFinancialsPanel
+
+CompanyListPanel *-- Company
+CompanyDetailsPanel *-- Company
+CompanyFinancialsPanel *-- Company
+Panel <|-- CompanyPanel
+Company *-- Ticker
+
+'Aggregation
+
+'Used as a base class for terminal, allows for drawing and sizing
+'Implement non abstract then make it abstract
+abstract class Window {
+int x;
+int y;
+}
+
+'Implement the Terminal as one class first, then break it out into separate modules
+class Terminal {
+- List<Component> components
+
++ void DrawAllComponents()
+}
+
+abstract class Component {
+- int x
+- int y
+- double length
+- double width
+- double height
+
++ Draw()
+'Probably want some sort of polymorphic IsAt to handle all styles of rect
++ IsAt()
+}
+
+class Heading {
+- string _title
+
++ Heading()
+}
+
+' unsure if a Toolbar is even needed
+class Toolbar {
+}
+
+enum PanelType {
+    CompanyList
+    CompanyDetails
+    CompanyFinancials
+}
+
+enum ComponentType {
+    Panel
+    Heading
+    Toolbar
+    Button
+}
+
+class Button {
+- string _title
+
++ Button()
+
++ void ActionOnUserInteraction()
+}
+
+interface IInteractable {
++ void ActionOnUserInteraction()
+}
+
+class Panel {
+- string Data
+' refers to the json key that holds the data we wish to populate
+- string DataKey
+
++ Panel(data)
+
++ void RefreshData()
++ void GetData()
+}
+
+class CompanyPanel {
+    + ChangeCompany(string CompanyName)
+}
+
+class CompanyListPanel {
+- List<Company> companyList
+
++ CompanyListPanel()
+
+}
+
+class CompanyDetailsPanel {
+- Company _company
+
++ CompanyDetailsPanel()
+
+}
+
+class CompanyFinancialsPanel {
+- Company _company
+
++ CompanyFinancialsPanel()
+
+}
+
+' Replaces the property for Company Panels as when the company is updated, it needs to update
+' the data in the panel
+interface IUpdatable {
++ ChangeCompany(string CompanyName);
+}
+
+
+class Company {
+- string name
+- bool active
+- Ticker ticker
+
++ Company()
+
+__properties__
+--getter only--
+bool Active
+}
+
+class Ticker {
+- string code
+
++ Ticker(code, Company)
+
+--properties--
++ Code
+}
+
+''Perhaps fuck the import stuff, just use existing input files to start
+''Dont bother with having an independent way to call new files, just populate
+''from a data directory until everything is working, then add on as a bonus
+'class Import {
+'- path storageLocation
+'- string fileName
+'- path remoteLocation
+'
+'+ Import(remoteLocation, storageLocation, fileName)
+'}
+'
+'class FileImport {
+'}
+'
+'class WebImport {
+'}
+'abstract class Data {
+'}
+'
+'Import <|- FileImport
+'Import <|- WebImport
+
+@enduml
