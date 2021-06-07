@@ -1,0 +1,21 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+actor User #red
+
+User -> Terminal: Interaction with Terminal
+Terminal -> Components: DrawAllComponents()
+Components -> Button: Draw() 
+Button --> Terminal: Drawn Button
+Components -> Heading: Draw()  
+Heading --> Terminal: Drawn Heading
+Components -> Toolbar: Draw()  
+Toolbar --> Terminal: Drawn Toolbar
+Components -> Panel: Draw() 
+Panel --> Terminal: Drawn Panel
+Panel -> CompanyPanel
+Terminal --> User: Usable Data Terminal
+
+@enduml
